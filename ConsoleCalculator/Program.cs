@@ -15,12 +15,12 @@ namespace MyApp
                 int firstNumber = 0;
                 readNumber(ref firstNumber, "Введите первое число");
                 Console.WriteLine("Введите желаемую операцию");
-                string sign = ""; // sign хранит в себе знак желаемой операции
-                readSign(ref sign);
+                string operation = ""; // operation хранит в себе знак желаемой операции
+                readOperation(ref operation);
                 Console.WriteLine("Введите второе число");
                 int secondNumber = 0;
                 readNumber(ref secondNumber, "Введите второе число");
-                Console.WriteLine("Результат: " + firstNumber + " " + sign + " " + secondNumber + " = " + calculate(firstNumber, secondNumber, sign));
+                Console.WriteLine("Результат: " + firstNumber + " " + operation + " " + secondNumber + " = " + calculate(firstNumber, secondNumber, operation));
                 Console.WriteLine("");
             }
         }
@@ -46,7 +46,7 @@ namespace MyApp
             }
         }
 
-        static void readSign(ref string str)
+        static void readOperation(ref string str)
         {
             str = Console.ReadLine();
             if (str == "!info")
@@ -54,23 +54,19 @@ namespace MyApp
             if (!((str == "/") | (str == "+") | (str == "-") | (str == "*")))
             {
                 Console.WriteLine("Введите корректный знак или !info");
-                readSign(ref str);
+                readOperation(ref str);
             }
         }
 
-        static int calculate(int firstNumber, int secondNumber, string sign)
+        static int calculate(int firstNumber, int secondNumber, string operation)
         {
-            switch (sign)
+            switch (operation)
             {
-                case "-": return firstNumber - secondNumber;
-                case "+": return firstNumber + secondNumber;
-                case "/": return firstNumber / secondNumber;
-                default:
-                    {
-                        if ((int.MinValue <= firstNumber * secondNumber) | (firstNumber * secondNumber <= int.MaxValue))
-                            Console.WriteLine("Результат умножения вышел за пределы int, ответ будет некорректным");
-                        return firstNumber * secondNumber; // Т.к. sign к моменту вызова метода может иметь только одно из четырёх значений (-, +, *, /), deafult подразумевает единственное не перечисленное в case значение
-                    }
+                case "-": return subtraction(firstNumber, secondNumber);
+                case "+": return addition(firstNumber, secondNumber);
+                case "/": return division(firstNumber, secondNumber);
+                default: return multiplication(firstNumber, secondNumber); // Т.к. sign к моменту вызова метода может иметь только одно из четырёх значений (-, +, *, /), deafult подразумевает единственное не перечисленное в case значение
+                    
             }
         }
         static void info()
@@ -79,6 +75,26 @@ namespace MyApp
             Console.WriteLine("Он умеет выполнять следующие вычисления с целыми (и только целыми!) числами:\n- вычитание (-);\n-сложение (+);\n- деление (/);\n- умножение (*).");
             Console.WriteLine("Алгоритм работы: сначала пользователь вводит первое число, затем вводит желаемую операцию, а после второе число, после чего калькулятор выведет ответ.");
             Console.WriteLine("");
+        }
+
+        static int multiplication(int a, int b)
+        {
+            if ((int.MinValue <= a * b) | (a * b <= int.MaxValue))
+                Console.WriteLine("Результат умножения вышел за пределы int, ответ будет некорректным");
+            return a * b;
+        }
+
+        static int division(int a, int b)
+        {
+            return a / b;
+        }
+        static int addition(int a, int b)
+        {
+            return a * b;
+        }
+        static int subtraction(int a, int b)
+        {
+            return a - b;
         }
     }
 }
