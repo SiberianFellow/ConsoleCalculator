@@ -8,7 +8,7 @@ namespace MyApp
     {
         public static void Main(string[] args)
         {
-            info();
+            showInfo();
             while (true)
             {
                 Console.WriteLine("Введите первое число");
@@ -20,15 +20,14 @@ namespace MyApp
                 Console.WriteLine("Введите второе число");
                 int secondNumber = 0;
                 readNumber(ref secondNumber, "Введите второе число");
-                Console.WriteLine("Результат: " + firstNumber + " " + operation + " " + secondNumber + " = " + calculate(firstNumber, secondNumber, operation));
-                Console.WriteLine("");
+                calculate(firstNumber, secondNumber, operation);
             }
         }
         static void readNumber(ref int number, string message)
         {
             string input = Console.ReadLine();
             if (input == "!info")
-                info();
+                showInfo();
             try
             {
                 number = Int32.Parse(input);
@@ -40,7 +39,7 @@ namespace MyApp
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Произошёл StackOverflow, введите число поменьше.");
+                Console.WriteLine("Произошёл StackOverflow, введите число из диапазона int32.");
                 Console.WriteLine($"{message} или !info");
                 readNumber(ref number, message);
             }
@@ -50,7 +49,7 @@ namespace MyApp
         {
             str = Console.ReadLine();
             if (str == "!info")
-                info();
+                showInfo();
             if (!((str == "/") | (str == "+") | (str == "-") | (str == "*")))
             {
                 Console.WriteLine("Введите корректный знак или !info");
@@ -58,18 +57,35 @@ namespace MyApp
             }
         }
 
-        static int calculate(int firstNumber, int secondNumber, string operation)
+        static void calculate(int firstNumber, int secondNumber, string operation)
         {
             switch (operation)
             {
-                case "-": return subtraction(firstNumber, secondNumber);
-                case "+": return addition(firstNumber, secondNumber);
-                case "/": return division(firstNumber, secondNumber);
-                default: return multiplication(firstNumber, secondNumber); // Т.к. sign к моменту вызова метода может иметь только одно из четырёх значений (-, +, *, /), deafult подразумевает единственное не перечисленное в case значение
-                    
+                case "-":
+                    {
+                        Console.WriteLine("ABOBA");
+                        subtraction(firstNumber, secondNumber);
+                        break;
+                    }
+                case "+":  
+                    {
+                        addition(firstNumber, secondNumber);
+                        break;
+                    }
+                case "/":
+                    {
+                        division(firstNumber, secondNumber);
+                        break;
+                    }
+                default:
+                    {
+                        multiplication(firstNumber, secondNumber); // Т.к. sign к моменту вызова метода может иметь только одно из четырёх значений (-, +, *, /), deafult подразумевает единственное не перечисленное в case значение
+                        break;
+                    }
             }
+
         }
-        static void info()
+        static void showInfo()
         {
             Console.WriteLine("Добро пожаловать в консольный калькулятор!");
             Console.WriteLine("Он умеет выполнять следующие вычисления с целыми (и только целыми!) числами:\n- вычитание (-);\n-сложение (+);\n- деление (/);\n- умножение (*).");
@@ -77,24 +93,38 @@ namespace MyApp
             Console.WriteLine("");
         }
 
-        static int multiplication(int a, int b)
+        static void multiplication(int a, int b)
         {
-            if ((int.MinValue <= a * b) | (a * b <= int.MaxValue))
-                Console.WriteLine("Результат умножения вышел за пределы int, ответ будет некорректным");
-            return a * b;
+            long result = (long)a * (long)b;
+            Console.WriteLine("Результат: " + a + " * " + b + " = " + result);
+            Console.WriteLine("");
         }
 
-        static int division(int a, int b)
+        static void division(int a, int b)
         {
-            return a / b;
+            try
+            {
+                int result = a / b;
+                Console.WriteLine("Результат: " + a + " / " + b + " = " + result);
+                Console.WriteLine("");
         }
-        static int addition(int a, int b)
+            catch (Exception)
+            {
+                Console.WriteLine("Деление на ноль. Зачем?");
+                Console.WriteLine("");
+            }
+}
+        static void addition(int a, int b)
         {
-            return a * b;
+            long result = (long)a + (long)b;
+            Console.WriteLine("Результат: " + a + " + " + b + " = " + result);
+            Console.WriteLine("");
         }
-        static int subtraction(int a, int b)
+        static void subtraction(int a, int b)
         {
-            return a - b;
+            long result = (long)a - (long)b;
+            Console.WriteLine("Результат: " + a + " - " + b + " = " + result);
+            Console.WriteLine("");
         }
     }
 }
